@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бойцы</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="cards" id="cardsContainer">
+            <!-- Здесь будут карточки бойцов, заполняемые из JavaScript -->
+        </div>
+
+        <div id="selectedFighters">
+            <!-- Здесь будут выводиться характеристики выбранных бойцов -->
+        </div>
+
+        <button id="restartButton">Перезапустить</button>
+
+        <script type="module">
+            import Knight from './knight.js';
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const cardsContainer = document.getElementById('cardsContainer');
+                const selectedFightersContainer = document.getElementById('selectedFighters');
+                const restartButton = document.getElementById('restartButton');
+                let selectedFighters = [];
+
+                if (!cardsContainer || !selectedFightersContainer || !restartButton) {
+                    console.error('Элемент не найден.');
+                    return;
+                }
+
+                restartButton.addEventListener('click', () => restartFight());
+
+                function generateFighterCards() {
+                    cardsContainer.innerHTML = '';
+                    for (let i = 0; i < 6; i++) {
+                        const newFighter = Knight.generateRandomFighter();
+                        const newCard = createFighterCard(newFighter);
+                        cardsContainer.appendChild(newCard);
+                    }
+                }
+
+                function handleFighterSelection(fighter, card) {
+                    if (card.classList.contains('selected')) {
+                        card.classList.remove('selected');
+                        selectedFighters = selectedFighters.filter(selected => selected.name !== fighter.name);
+                    } else if (document.querySelectorAll('.selected').length < 2) {
+                        card.classList.add('selected');
+                        selectedFighters.push(fighter);
+                        if (selectedFighters.length === 2) {
+                         removeUnselectedFighters();
+                         startBattle(selectedFighters[0], selectedFighters[1]);
+                        }
+                    }
+                }
+
+                function createFighterCard(fighter) {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.addEventListener('click', () => handleFighterSelection(fighter, card));
+
+                    const nameElement = document.createElement('div');
+                    nameElement.classList.add('fighter-name');
+                    nameElement.textContent = fighter.name;
+                    card.appendChild(nameElement);
+
+                    const statsElement = document.createElement('div');
+                    statsElement.classList.add('fighter-stats');
+                    statsElement.innerHTML = `<p class="stat-text">
+                        <span>- Здоровье: <span id="${fighter.name}-health">${fighter.health}</span> </span>
+                        <span>- Броня: <span id="${fighter.name}-armor">${fighter.armor}</span> </span>
+                        <span>- Урон: <span id="${fighter.name}-damage">${fighter.damage}</span> </span>
+                        <span>- Ловкость: <span id="${fighter.name}-agility">${fighter.agility}</span> </span>
+                        <span>- Хитрость: <span id="${fighter.name}-cunning">${fighter.cunning}</span> </span>
+                        <span>- Выносливость: <span id="${fighter.name}-stamina">${fighter.stamina}</span></span> 
+                    </p>`;
+                    card.appendChild(statsElement);
+
+                    return card;
+                }
+
+                function removeUnselectedFighters() {
+                    const unselectedCards = document.querySelectorAll('.card:not(.selected)');
+                    unselectedCards.forEach(card => card.remove());
+                }
+
+                function startBattle(fighter1, fighter2) {
+                    const interval = setInterval(() => {
+                        fighter2.takeDamage(fighter1.damage * fighter1.agilityMultiplier());
+                        fighter1.takeDamage(fighter2.damage * fighter2.agilityMultiplier());
+
+                        updateFighterStats(fighter1);
+                        updateFighterStats(fighter2);
+
+                        if (fighter1.health <= 0 || fighter2.health <= 0) {
+                            clearInterval(interval);
+                            determineWinner(fighter1, fighter2);
+                        }
+                    }, 700);
+                }
+
+                function updateFighterStats(fighter) {
+                    const healthElement = document.getElementById(`${fighter.name}-health`);
+                    const armorElement = document.getElementById(`${fighter.name}-armor`);
+                    const damageElement = document.getElementById(`${fighter.name}-damage`);
+                    const agilityElement = document.getElementById(`${fighter.name}-agility`);
+                    const cunningElement = document.getElementById(`${fighter.name}-cunning`);
+                    const staminaElement = document.getElementById(`${fighter.name}-stamina`);
+
+                    if (healthElement && armorElement && damageElement && agilityElement && cunningElement && staminaElement) {
+                        healthElement.textContent = fighter.health.toFixed(2);
+                        armorElement.textContent = fighter.armor.toFixed(2);
+                        damageElement.textContent = fighter.damage.toFixed(2);
+                        agilityElement.textContent = fighter.agility.toFixed(2);
+                        cunningElement.textContent = fighter.cunning.toFixed(2);
+                        staminaElement.textContent = fighter.stamina.toFixed(2);
+                    }
+                }
+
+                function determineWinner(fighter1, fighter2) {
+                    let winner, loser;
+
+                    if (fighter1.health <= 0 && fighter2.health <= 0) {
+                        return null;
+                    } else if (fighter1.health <= 0) {
+                        winner = fighter2;
+                        loser = fighter1;
+                    } else {
+                        winner = fighter1;
+                        loser = fighter2;
+                    }
+
+                    displayWinnerAndLoser(winner.name, loser.name);
+
+                    return winner;
+                }
+
+                function displayWinnerAndLoser(winnerName, loserName) {
+                    const selectedFightersContainer = document.getElementById('selectedFighters');
+                    if (selectedFightersContainer) {
+                        selectedFightersContainer.innerHTML = `
+                            <p class="winner">${winnerName} - Победитель</p>
+                            <p class="loser">${loserName} - Проигравший</p>
+                        `;
+                    }
+                }
+
+                function restartFight() {
+                    // Убираем цвета с карточек
+                    const allCards = document.querySelectorAll('.card');
+                    allCards.forEach(card => {
+                        card.style.backgroundColor = '';
+                    });
+
+                    // Восстанавливаем исходное состояние карточек бойцов
+                    generateFighterCards();
+
+                    // Очищаем выбранных бойцов
+                    selectedFighters = [];
+                    selectedFightersContainer.innerHTML = '';
+                }
+
+                // Генерируем карточки бойцов при загрузке страницы
+                generateFighterCards();
+            });
+        </script>
+    </div>
+</body>
+</html>

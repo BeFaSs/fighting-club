@@ -1,0 +1,88 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  background-image: url('fon.png');
+  height: 100%;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #000;
+  padding: 10px;
+}
+button#restartButton {
+  background-color: #527955;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 2em;
+}
+
+button#restartButton:hover {
+  background-color: #527945;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+
+p {
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+button {
+  background-color: #527955;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 2em;
+}
+
+button:hover {
+  background-color: #527945;
+}
+
+.fighters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.fighter {
+  background-color: #FFFF);
+  border-radius: 10px;
+  padding: 15px;
+  width: 200px;
+  cursor: pointer;
+  transition: border 0.3s;
+  box-shadow: 0 4px 6px #001;
+  text-align: left;
+}
+
+.fighter h2 {
+  font-size: 1.2em;
+}
+
+.fighter p {
+  font-size: 0.9em;
+}
+
+/* Класс для выбранного бойца */
+.selected {
+  border: 2px solid black;
+}

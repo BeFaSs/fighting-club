@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Боевая арена</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Добро пожаловать на боевую арену</h1>
+    <p>Испытайте острые ощущения от боя со случайно сгенерированными бойцами.</p>
+    <p>Приготовьтесь к битве и позвольте лучшему бойцу победить!</p>
+    <button id="generateFighters" onclick="generateFighters()">Генерация бойцов</button>
+    <script>
+      function generateFighters() {
+        window.location.href = '/index2.html';
+      }
+    </script>
+    
+    <div class="fighters-container" id="fightersContainer"></div>
+  </div>
+</body>
+</html>

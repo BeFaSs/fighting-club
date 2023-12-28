@@ -1,0 +1,104 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  background-image: url("fon2.png");
+  height: 100vh;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 20px;
+}
+button {
+  background-color: #527955;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 2em;
+}
+
+button:hover {
+  background-color: #527945;
+}
+.cards {
+  height: 800px;
+  width: 1200px;
+  display: flex;
+  text-align: center;
+  color: white;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: space-around;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.card {
+  margin: 25px;
+  width: 200px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  opacity: 0.7;
+  color: #000;
+  border-radius: 15px;
+  border: solid 0px #000;
+  transition: 70ms;
+}
+
+.card.selected {
+  border: 2px solid #000;
+  opacity: 1;
+}
+
+.card:hover {
+  border: solid 2px #000;
+}
+
+.board {
+  border: 2px solid #000;
+}
+
+.card:focus {
+  border: solid 2px #000;
+  opacity: 1;
+}
+#selectedFighters p.winner {
+  color: #000;
+  font-weight: bold;
+}
+
+#selectedFighters p.loser {
+  color #000;
+  font-weight: bold;
+}
+
+.go-border {
+  border: 1px solid #000;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.name {
+  word-wrap: break-word;
+  max-width: 180px;
+  font-size: 24px;
+  color: #000;
+}
+
+.stat-text {
+  display: flex;
+  flex-direction: column;
+}
